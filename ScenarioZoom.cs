@@ -239,10 +239,16 @@ namespace Paint3DTest
         }
 
         [TestMethod]
+        public void TapTest4() {
+            Activate(21572);
+            TapTest3();
+        }
+
+        [TestMethod]
         public void TapTest2()
         {
             //process ID
-            Activate(3412);
+            Activate(3316);
 
             // Draw a circle with radius 300 and 40 (x, y) points
             const int radius = 300;
@@ -293,7 +299,8 @@ namespace Paint3DTest
         public static void ClassInitialize(TestContext context)
         {
             // Create session to launch or bring up Paint 3D application
-            Setup(context);
+            //Setup(context);
+            Setup2(context, "Untitled - Paint 3D");
         }
 
         [ClassCleanup]

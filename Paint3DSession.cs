@@ -20,6 +20,14 @@ using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
 using System;
 
+//using System;
+using System.Net;
+using System.Threading;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using OpenQA.Selenium.Appium.Windows;
+//using OpenQA.Selenium.Remote;
+//using OpenQA.Selenium;
+
 namespace Paint3DTest
 {
     public class Paint3DSession
@@ -30,6 +38,7 @@ namespace Paint3DTest
         //private const string Paint3DAppId = "C:\\Paint3D";
 
         protected static WindowsDriver<WindowsElement> session;
+        protected static WindowsDriver<WindowsElement> DesktopSession;
 
         public static void Setup(TestContext context)
         {
@@ -51,16 +60,36 @@ namespace Paint3DTest
             }
         }
 
-        public static void TearDown()
-        {
-            // Close the application and delete the session
-            if (session != null)
-            {
-                ClosePaint3D();
-                session.Quit();
-                session = null;
-            }
+        public static void Setup2(TestContext context, String applicationTitle) {
+            DesiredCapabilities rootCapabilities = new DesiredCapabilities();
+            rootCapabilities.SetCapability("platformName", "Windows");
+            rootCapabilities.SetCapability("deviceName", "WindowsPC");
+            rootCapabilities.SetCapability("app", "Root");
+            DesktopSession = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723/wd/hub"), rootCapabilities);
+
+            //setup session
+            var ApplicationWindow = DesktopSession.FindElementByName(applicationTitle);
+            var ApplicationTopLevelWindowHandle = ApplicationWindow.GetAttribute("NativeWindowHandle");
+            ApplicationTopLevelWindowHandle = (int.Parse(ApplicationTopLevelWindowHandle)).ToString("x");//Convert to Hex
+            DesiredCapabilities appCapabilities = new DesiredCapabilities();
+            appCapabilities.SetCapability("platformName", "Windows");
+            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            appCapabilities.SetCapability("appTopLevelWindow", ApplicationTopLevelWindowHandle);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+
+            //}
         }
+
+        //public static void TearDown()
+        //{
+        //    // Close the application and delete the session
+        //    if (session != null)
+        //    {
+        //        ClosePaint3D();
+        //        session.Quit();
+        //        session = null;
+        //    }
+        //}
 
         [TestInitialize]
         public void CreateNewPaint3DProject()

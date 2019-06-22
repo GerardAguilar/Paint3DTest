@@ -102,11 +102,11 @@ namespace Paint3DTest
             Setup(context);
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            TearDown();
-        }
+        //[ClassCleanup]
+        //public static void ClassCleanup()
+        //{
+        //    TearDown();
+        //}
 
         [TestInitialize]
         public void SetupBrushesPane()
